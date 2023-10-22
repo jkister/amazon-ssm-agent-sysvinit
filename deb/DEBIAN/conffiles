@@ -1,0 +1,3 @@
+/etc/init.d/amazon-ssm-agent
+/etc/amazon/ssm/amazon-ssm-agent.json
+/etc/amazon/ssm/seelog.xml

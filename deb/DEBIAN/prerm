@@ -1,0 +1,23 @@
+#!/bin/bash
+
+PATH=/usr/sbin:$PATH
+
+echo "Stopping agent"
+/etc/init.d/amazon-ssm-agent stop
+
+echo "Removing from startup"
+if command -v update-rc.d >/dev/null 2>&1 ; then
+    update-rc.d amazon-ssm-agent remove
+elif command -v chkconfig >/dev/null 2>&1 ; then
+    chkconfig --del amazon-ssm-agent
+elif [ -d /etc/rc2.d ] && [ -d /etc/rc0.d ] ; then
+    for rl in 2 3 4 5 ; do
+        rm /etc/rc$rl.d/S80amazon-ssm-agent
+    done
+    for rl in 0 1 6 ; do
+        rm /etc/init.d/amazon-ssm-agent /etc/rc$rl.d/K80amazon-ssm-agent
+    done
+else
+    echo "** not sure how to unhook your startup environment.  do that manually."
+fi
+exit 0

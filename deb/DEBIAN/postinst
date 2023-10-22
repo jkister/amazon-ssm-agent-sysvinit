@@ -1,0 +1,24 @@
+#!/bin/sh
+
+PATH=/usr/sbin:$PATH
+
+echo "Configuring startup"
+if command -v update-rc.d >/dev/null 2>&1 ; then
+    update-rc.d amazon-ssm-agent defaults
+elif command -v chkconfig >/dev/null 2>&1 ; then
+    chkconfig --level 2345 amazon-ssm-agent on
+elif [ -d /etc/rc2.d ] && [ -d /etc/rc0.d ] ; then
+    for rl in 2 3 4 5 ; do
+        ln -s /etc/init.d/amazon-ssm-agent /etc/rc$rl.d/S80amazon-ssm-agent
+    done
+    for rl in 0 1 6 ; do
+        ln -s /etc/init.d/amazon-ssm-agent /etc/rc$rl.d/K80amazon-ssm-agent
+    done
+else
+    echo "** not sure how to hook your startup environment.  do that manually."
+fi
+
+echo "Starting agent"
+
+/etc/init.d/amazon-ssm-agent start
+exit 0

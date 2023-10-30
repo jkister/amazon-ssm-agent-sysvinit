@@ -15,7 +15,7 @@ elif [ -d /etc/rc2.d ] && [ -d /etc/rc0.d ] ; then
         rm /etc/rc$rl.d/S80amazon-ssm-agent
     done
     for rl in 0 1 6 ; do
-        rm /etc/init.d/amazon-ssm-agent /etc/rc$rl.d/K80amazon-ssm-agent
+        rm /etc/rc$rl.d/K80amazon-ssm-agent
     done
 else
     echo "** not sure how to unhook your startup environment.  do that manually."
